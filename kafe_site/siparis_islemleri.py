@@ -4,8 +4,8 @@ from veri_tabanı import Kullanici, kullanıcı_siparisleri
 
 app=App.app
 siparisler = kullanıcı_siparisleri()
-haftalık_satis_path=r"C:\Users\MONSTER\3D Objects\yazprojeler\KAFE\kafe_site\json\haftalık_satıs.json"
-urunler_path=r'C:\Users\MONSTER\3D Objects\yazprojeler\KAFE\kafe_site\json\urunler.json'
+haftalık_satis_path=r"haftalık_satıs.json"
+urunler_path=r'urunler.json'
 with open(urunler_path, 'r', encoding="utf-8") as file:
     urunler = json.load(file)
 
