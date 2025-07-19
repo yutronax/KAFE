@@ -6,8 +6,8 @@ kullanici=Kullanici()
 toplam_fiyat=0
 app=App.app
 ortak_sifre = "elazığ"
-haftalık_satis_path=r"C:\Users\MONSTER\3D Objects\yazprojeler\KAFE\kafe_site\json\haftalık_satıs.json"
-yetkili_path=r'C:\Users\MONSTER\3D Objects\yazprojeler\KAFE\kafe_site\json\yetkili.json'
+haftalık_satis_path=r"haftalık_satıs.json"
+yetkili_path=r'yetkili.json'
 def json_dosya_oku(dosya_adi):
     with open(dosya_adi,"r",encoding="utf-8") as file:
       veri=json.load(file)
