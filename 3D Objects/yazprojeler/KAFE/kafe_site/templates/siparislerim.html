@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Siparişlerim - PRESTECH Kafe</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+            min-height: 100vh;
+            color: white;
+            overflow-x: hidden;
+        }
+
+        .navbar {
+            background: rgba(20, 20, 20, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 15px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(45deg, #00f5ff, #00d4aa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #00d4aa;
+        }
+
+        .main-content {
+            margin-top: 80px;
+            padding: 40px 20px;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .page-title {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(45deg, #00f5ff, #00d4aa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .page-subtitle {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1.1rem;
+        }
+
+        .orders-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .order-card {
+            background: rgba(20, 20, 20, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .order-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 212, 170, 0.1);
+        }
+
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 15px;
+        }
+
+        .order-id {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #00d4aa;
+        }
+
+        .order-date {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+        }
+
+        .order-status {
+            background: rgba(0, 212, 170, 0.1);
+            border: 1px solid rgba(0, 212, 170, 0.3);
+            color: #00d4aa;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .order-items {
+            margin-bottom: 20px;
+        }
+
+        .order-items h4 {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+
+        .item-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .item-tag {
+            background: rgba(0, 245, 255, 0.1);
+            border: 1px solid rgba(0, 245, 255, 0.2);
+            color: #00f5ff;
+            padding: 8px 15px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .order-total {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0, 212, 170, 0.1);
+            border: 1px solid rgba(0, 212, 170, 0.2);
+            border-radius: 10px;
+            padding: 15px;
+        }
+
+        .total-label {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .total-amount {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #00d4aa;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .empty-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        .empty-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .empty-subtitle {
+            font-size: 1rem;
+            margin-bottom: 30px;
+        }
+
+        .order-btn {
+            background: linear-gradient(45deg, #00f5ff, #00d4aa);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+
+        .order-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 212, 170, 0.3);
+        }
+
+        .grid-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 212, 170, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 212, 170, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: -1;
+        }
+
+        .alert {
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .alert-warning {
+            background: rgba(85, 11, 245, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.2);
+            color: #fcd34d;
+        }
+
+        @media (max-width: 768px) {
+            .order-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .page-title {
+                font-size: 2rem;
+            }
+            
+            .item-list {
+                flex-direction: column;
+            }
+            
+            .order-total {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+            .sipariş-iptal {
+  background-color: #e74c3c !important;
+  color: white !important;
+  padding: 10px 20px !important;
+  border: none !important;
+  border-radius: 8px !important;
+  font-weight: bold !important;
+  font-size: 14px !important;
+  cursor: pointer !important;
+
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2) !important;
+  transition: background-color 0.3s ease, transform 0.2s ease !important;
+}
+
+.sipariş-iptal:hover {
+  background-color: #c0392b !important;
+  transform: scale(1.05) !important;
+}
+
+
+        }
+    </style>
+</head>
+<body>
+    <div class="grid-bg"></div>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">PRESTECH Kafe</div>
+            <div class="nav-links">
+                <a href="{{ url_for('Anasayfa') }}">Ana Sayfa</a>
+                <a href="{{ url_for('Siparis') }}">Sipariş Ver</a>
+                <a href="{{ url_for('Siparislerim') }}">Siparişlerim</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="page-header">
+            <h1 class="page-title">Siparişlerim</h1>
+            <p class="page-subtitle">Geçmiş siparişlerinizi görüntüleyin</p>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+   
+    
+
+
+    <div class="orders-container">
+  {% if tum_liste %}
+    {% for siparis, date, statu in tum_liste %}
+      <div class="order-card" style="position: relative;">
+        
+
+        <div class="order-header">
+          <div>
+            <div class="order-date">{{ date }}</div>
+          </div>
+          <div class="order-status">{{ statu }}</div>
+        </div>
+
+        <div class="order-items">
+          <div class="item-list">
+            {% for item in siparis.split(",") %}
+              <span class="item-tag">{{ item }}</span>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  {% else %}
+    <div class="empty-state">
+      <div class="empty-icon">🛒</div>
+      <h3 class="empty-title">Henüz sipariş vermediniz</h3>
+      <p class="empty-subtitle">İlk siparişinizi vererek lezzetli içeceklerimizi keşfedin</p>
+      <a href="{{ url_for('Siparis') }}" class="order-btn">Sipariş Ver</a>
+    </div>
+  {% endif %}
+</div>
+  <div name="siparis-iptal-islemleri">
+    <form method="post" style="position: absolute; top: 15px; right: 15px; z-index: 10;">
+          <input type="submit" name="iptal"  class="sipariş-iptal">SİPARİŞ İPTAL</input>
+        </form>
+  </div>
+
+
+    </main>
+    <script>
+  // Sipariş iptal butonunu oluştur
+  const form = document.createElement('form');
+  form.method = 'post';
+  form.style.position = 'absolute';
+  form.style.top = '20px';
+  form.style.right = '20px';
+  form.style.zIndex = '1000';
+
+  const button = document.createElement('button');
+  button.type = 'submit';
+  button.name = 'iptal';
+  button.value = '1';
+  button.innerText = 'SİPARİŞ İPTAL';
+
+  // Buton stilleri
+  button.style.padding = '10px 20px';
+  button.style.backgroundColor = '#ff4d4d';
+  button.style.color = '#fff';
+  button.style.border = 'none';
+  button.style.borderRadius = '8px';
+  button.style.fontSize = '16px';
+  button.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)';
+  button.style.cursor = 'pointer';
+  button.style.transition = 'background-color 0.3s';
+
+  button.onmouseover = function () {
+    button.style.backgroundColor = '#e60000';
+  };
+  button.onmouseleave = function () {
+    button.style.backgroundColor = '#ff4d4d';
+  };
+
+  // Elemanları ekle
+  form.appendChild(button);
+  document.body.appendChild(form);
+</script>
+
+
+</body>
+</html>
