@@ -1,9 +1,10 @@
-#flask modellerini çeri kaktar
+
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 import App
-from veri_tabanı import Kullanici,kullanıcı_siparisleri
+from veri_tabanı import Kullanici,kullanıcı_siparisleri,GREEN_MONEY
 musteri=Kullanici()
 siparisler=kullanıcı_siparisleri()
+money=GREEN_MONEY()
 app=App.app
 #gizli anahtar ayarla
 app.secret_key="elazığ"
@@ -40,13 +41,17 @@ def Giriş():
     if request.method == 'POST':
         Kullanici_Adi = request.form['Kullanici_Adi']
         Sifre = request.form['Sifre']
-        
+        session["sifre"]=Sifre
         if musteri.kullanici_var_mi(Kullanici_Adi, Sifre):
             session['kullanici_id'] = Kullanici_Adi
             flash('Giriş başarılı!', 'success')
+            money.user_insert(kullanici_adi=Kullanici_Adi,sifre=Sifre)
             return redirect(url_for('Anasayfa'))
         else:
             flash('Kullanıcı adı veya şifre yanlış!', 'danger')
+    
+
+        
     return render_template('giris.html')
 @app.route('/')
 def anasayfa():
@@ -66,23 +71,19 @@ def Anasayfa():
 @app.route('/cikis')
 def Cikis():
     session.pop('kullanici_id', None)
-    
     flash('Çıkış başarılı!', 'success')
     return redirect(url_for('Giriş'))
 @app.route('/profil')
 def Profil():
     if 'kullanici_id' not in session:
         flash('Lütfen giriş yapın!', 'warning')
-        return redirect(url_for('Giriş'))
-    
+        return redirect(url_for('Giriş'))    
     kullanici_adi = session['kullanici_id']
     kullanici_bilgileri=musteri.kullanici_bilgileri_getir(kullanici_adi)
     if not kullanici_bilgileri:
         flash('Kullanıcı bilgileri bulunamadı!', 'danger')
         return redirect(url_for('Giriş'))
     harcama=siparisler.toplam_harcama()
-    beklenen,tamamlanan,tumu=siparisler.bekleyen()
-    
-    
+    beklenen,tamamlanan,tumu=siparisler.bekleyen()    
     return render_template('profil.html',harcama=harcama,beklenen=beklenen,tamamlanan=tamamlanan,tumu=tumu)
 

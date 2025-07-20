@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Kampanyalar</title>
+</head>
+<body>
+    <h1>Kampanyalar</h1>
+    <ul>
+    {% for kampanya in kampanyalar %}
+        <li>{{ kampanya['isim'] }} - {{ kampanya['acıklama'] }}</li>
+    {% endfor %}
+    </ul>
+</body>
+</html>

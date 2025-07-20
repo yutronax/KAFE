@@ -1,21 +1,21 @@
 [
     {
-        "id": 1,
+        
         "yetki düzeyi": "patron",
         "isim": "yusuf"
     },
     {
-        "id": 2,
+        
         "yetki düzeyi": "yönetici",
         "isim": "gamze"
     },
     {
-        "id": 3,
+       
         "yetki düzeyi": "çalışan",
         "isim": "mehmet"
     },
     {
-        "id": 4,
+     
         "yetki düzeyi": "çalışan",
         "isim": "ayşe"
     },
@@ -26,9 +26,4 @@
     {
         "isim": "gamze",
         "yetki düzeyi": "yönetici"
-    },
-    {
-        "isim": "gamze",
-        "yetki düzeyi": "çalışan"
-    }
-]
+    }]

@@ -2,12 +2,14 @@
     {
         "id": 1,
         "isim": "Kahve",
-        "toplam_satıs": 7
+        "toplam_satıs": 12
     },
     {
+        
         "id": 2,
         "isim": "Çay",
         "toplam_satıs": 1
+
     },
     {
         "id": 3,
@@ -17,7 +19,7 @@
     {
         "id": 4,
         "isim": "Kola",
-        "toplam_satıs": 5
+        "toplam_satıs": 6
     },
     {
         "id": 5,
@@ -32,12 +34,12 @@
     {
         "id": 7,
         "isim": "Ayran",
-        "toplam_satıs": 4
+        "toplam_satıs": 5
     },
     {
         "id": 8,
         "isim": "Meyve Suyu",
-        "toplam_satıs": 13
+        "toplam_satıs": 17
     },
     {
         "id": 9,

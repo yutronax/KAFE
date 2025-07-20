@@ -31,7 +31,12 @@ def Siparis():
 
         
         siparis_str = ','.join(secilen_urunler)
-        if "onay" in request.form:  
+        if "onay" in request.form: 
+            beklenen,_,_= siparisler.bekleyen() 
+            if beklenen>0:
+                flash("Tamamlanmamış Siparişiniz var.")
+                return redirect(url_for("Siparis"))
+
             with open(haftalık_satis_path,"r",encoding="utf-8") as file:
                 veri=json.load(file)
             for i in secilen_urunler:
@@ -46,14 +51,20 @@ def Siparis():
                   
             siparisler.siparis_ekle(kullanici_adi, siparis_str,tarih,durum,toplam_fiyat)
             
-            flash(f'Siparişiniz başarıyla alındı! Toplam tutar: {toplam_fiyat} TL', 'success')
-            return redirect(url_for('Anasayfa'))
+           
+            return redirect(url_for('Odeme'))
         
 
     return render_template('siparis.html', urunler=urunler) 
 
     
-    
+@app.route('/odeme')
+def Odeme():
+     toplam_fiyat=siparisler.toplam_fiyat()
+     flash(f'Siparişiniz başarıyla alındı! Toplam tutar: {toplam_fiyat} TL', 'success')
+     return render_template("odeme.html",toplam_fiyat=toplam_fiyat)
+
+
 @app.route('/siparislerim',methods=["GET","POST"])
 def Siparislerim():
     if 'kullanici_id' not in session:
@@ -74,7 +85,7 @@ def Siparislerim():
   
 
     
-    return render_template('siparislerim.html',tum_liste = birlesik_liste, urunler=urunler)#kodu çalıştırma
+    return render_template('siparislerim.html',tum_liste = birlesik_liste, urunler=urunler)
 
   
 

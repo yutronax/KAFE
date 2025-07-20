@@ -86,6 +86,11 @@ class kullanıcı_siparisleri:
         with sqlite3.connect('kafe.db') as conn:
             cursor = conn.cursor()
             return cursor.execute("SELECT SUM(HARCAMA) FROM siparisler").fetchone()[0]
+    def toplam_fiyat(self):
+        with sqlite3.connect('kafe.db') as conn:
+            cursor = conn.cursor()
+            return cursor.execute("SELECT HARCAMA FROM siparisler WHERE DURUM='beklemede'").fetchone()[0]
+
         
     def bekleyen(selfs):
         with sqlite3.connect('kafe.db') as conn:
@@ -95,7 +100,73 @@ class kullanıcı_siparisleri:
             tamamlanan_siparisler=int(tum_siparisler)-int(beklenen_siparisler) 
             if tamamlanan_siparisler<0: tamamlanan_siparisler=0
             return beklenen_siparisler,tamamlanan_siparisler,tum_siparisler
+    
+
+
              
         
 
 
+import sqlite3
+
+class GREEN_MONEY:
+    def __init__(self):
+        with sqlite3.connect('kafe.db') as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS GREEN_MONEY (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    Kullanici_Adi TEXT NOT NULL,
+                    MONEY INTEGER NOT NULL,
+                    SIFRE TEXT NOT NULL,
+                    FOREIGN KEY (Kullanici_Adi) REFERENCES kullanicilar(Kullanici_Adi)
+                )
+            """)
+
+    def money_insert(self, kullanici_adi,sifre, artis):
+        with sqlite3.connect('kafe.db') as conn:
+            cursor = conn.cursor()
+            cursor.execute(
+                "UPDATE GREEN_MONEY SET MONEY = MONEY + ? WHERE Kullanici_Adi = ? AND SIFRE=?", 
+                (10 * artis, kullanici_adi,sifre)
+            )
+            conn.commit()
+
+    def money_show(self, kullanici_adi,sifre):
+        with sqlite3.connect('kafe.db') as conn:
+            cursor = conn.cursor()
+            result = cursor.execute(
+                "SELECT MONEY FROM GREEN_MONEY WHERE Kullanici_Adi = ? AND SIFRE=?", 
+                (kullanici_adi,sifre,)
+            ).fetchone()
+            if result:
+                return result[0]
+            else:
+                return None  
+
+    def money_using(self, kullanici_adi,sifre, harcama):
+        with sqlite3.connect('kafe.db') as conn:
+            cursor = conn.cursor()
+            cursor.execute(
+                "UPDATE GREEN_MONEY SET MONEY = MONEY - ? WHERE Kullanici_Adi = ? AND SIFRE=?", 
+                (harcama, kullanici_adi,sifre)
+            )
+            conn.commit()
+    def user_insert(self,kullanici_adi,sifre):
+        
+     with sqlite3.connect('kafe.db') as conn:
+        cursor = conn.cursor()
+
+        # Önce kullanıcı var mı kontrol et
+        cursor.execute("SELECT 1 FROM GREEN_MONEY WHERE Kullanici_Adi = ?", (kullanici_adi,))
+        if cursor.fetchone():
+            print("Bu kullanıcı zaten var.")
+            return False
+        
+        # Yoksa ekle
+        cursor.execute(
+            "INSERT INTO GREEN_MONEY (Kullanici_Adi, SIFRE, MONEY) VALUES (?, ?, ?)",
+            (kullanici_adi, sifre, 0)
+        )
+        conn.commit()
+        return True
